@@ -131,43 +131,20 @@ def initialize() {
     }
     log.debug("The day is $today")
     // This section is where the time/temperature shcedule is set.
-    if (today == "Monday") {
+    if (today == "Monday"
+        || today == "Tuesday"
+        || today == "Wednesday"
+        || today == "Thursday") {
+        log.debug("Setting ${today}'s weekday schedule")
         schedule(time1, changetemp1)
         schedule(time2, changetemp2)
         schedule(time3, changetemp3)
         schedule(time4, changetemp4)
     }
-    if (today =="Tuesday") {
-        schedule(time1, changetemp1)
-        schedule(time2, changetemp2)
-        schedule(time3, changetemp3)
-        schedule(time4, changetemp4)
-    }
-    if (today =="Wednesday") {
-        schedule(time1, changetemp1)
-        schedule(time2, changetemp2)
-        schedule(time3, changetemp3)
-        schedule(time4, changetemp4)
-    }
-    if (today =="Thursday") {
-        schedule(time1, changetemp1)
-        schedule(time2, changetemp2)
-        schedule(time3, changetemp3)
-        schedule(time4, changetemp4)
-    }
-    if (today =="Friday") {
-        schedule(time11, changetemp11)
-        schedule(time21, changetemp21)
-        schedule(time31, changetemp31)
-        schedule(time41, changetemp41)
-    }
-    if (today =="Saturday") {
-        schedule(time11, changetemp11)
-        schedule(time21, changetemp21)
-        schedule(time31, changetemp31)
-        schedule(time41, changetemp41)
-    }
-    if (today =="Sunday") {
+    if (today =="Friday"
+        || today == "Saturday"
+        || today == "Sunday") {
+        log.debug("Setting ${today}'s weekend schedule")
         schedule(time11, changetemp11)
         schedule(time21, changetemp21)
         schedule(time31, changetemp31)
