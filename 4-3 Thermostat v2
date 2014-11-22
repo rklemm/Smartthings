@@ -1,0 +1,317 @@
+/**
+ *  5-2 Day Thermostat
+ *
+ *  Copyright 2014 Ramit Bhalla
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ */
+definition(
+		name: "4-3 Thermostat",
+		namespace: "rklemm",
+
+		author: "Ramit Bhalla",
+		description: "4-3 Thermostat",
+    	category: "My Apps",
+    	iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
+    	iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png")
+
+
+/**
+ *  Automatic HVAC Program
+ *
+ *  Author: RBoy
+ *  Updated: 2014-11-13
+ */
+preferences {
+	section("Choose thermostat ") {
+		input "thermostat", "capability.thermostat", required: true
+	}
+
+	section("Monday to Friday Schedule") {
+		input "timeWeekdayWake", "time", title: "Wake Time", required: true
+		input "setPointHeatWeekdayWake", "number", title: "Wake Heat Temp", required: true
+		input "timeWeekdayLeave", "time", title: "Leave Time", required: true
+		input "setPointHeatWeekdayLeave", "number", title: "Leave Heat Temp", required: true
+		input "timeWeekdayReturn", "time", title: "Return Time", required: true
+		input "setPointHeatWeekdayReturn", "number", title: "Return Heat Temp", required: true
+		input "timeWeekdaySleep", "time", title: "Sleep Time", required: true
+		input "setPointHeatWeekdaySleep", "number", title: "Sleep Heat Temp", required: true
+	}
+	section("Saturday and Sunday Schedule") {
+		input "timeWeekendWake", "time", title: "Wake Time", required: true
+		input "setPointHeatWeekendWake", "number", title: "Wake Heat Temp", required: true
+		input "timeWeekendLeave", "time", title: "Leave Time", required: true
+		input "setPointHeatWeekendLeave", "number", title: "Leave Heat Temp", required: true
+		input "timeWeekendReturn", "time", title: "Return Time", required: true
+		input "setPointHeatWeekendReturn", "number", title: "Return Heat Temp", required: true
+		input "timeWeekendSleep", "time", title: "Sleep Time", required: true
+		input "setPointHeatWeekendSleep", "number", title: "Sleep Heat Temp", required: true
+	}
+}
+
+def installed()
+{
+	subscribeToEvents()
+}
+
+def updated()
+{
+    unsubscribe()
+	subscribeToEvents()
+}
+
+def subscribeToEvents() {
+    initialize()
+}
+
+// This section determines which day it is.
+def initialize() {
+
+	unschedule()
+	def calendar = Calendar.getInstance()
+	calendar.setTimeZone(location.timeZone)
+	def today = calendar.get(Calendar.DAY_OF_WEEK)
+   	def timeNow = now()
+	def midnightToday = timeToday("2000-01-01T23:59:59.999-0000", location.timeZone)
+   	log.debug("Current time is ${(new Date(timeNow)).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+	log.debug("Midnight today is ${midnightToday.format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+   	log.trace("Weekday scheduleWeekdayWake ${timeToday(timeWeekdayWake, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekday scheduleWeekdayLeave ${timeToday(timeWeekdayLeave, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekday scheduleWeekdayReturn ${timeToday(timeWeekdayReturn, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekday scheduleWeekdaySleep ${timeToday(timeWeekdaySleep, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend scheduleWeekendWake ${timeToday(timeWeekendWake, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend scheduleWeekendLeave ${timeToday(timeWeekendLeave, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend scheduleWeekendReturn ${timeToday(timeWeekendReturn, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend scheduleWeekendSleep ${timeToday(timeWeekendSleep, location.timeZone).format("HH:mm z", location.timeZone)}")
+
+	// This section is where the time/temperature schedule is set
+	switch (today) {
+		case Calendar.MONDAY:
+		case Calendar.TUESDAY:
+		case Calendar.WEDNESDAY:
+        	if (timeNow >= timeToday(timeWeekdayWake, location.timeZone).time && timeNow < timeToday(timeWeekdayLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempWeekdayWake()
+            	schedule(timeToday(timeWeekdayLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdayLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	}
+        	else if (timeNow >= timeToday(timeWeekdayLeave, location.timeZone).time && timeNow < timeToday(timeWeekdayReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempWeekdayLeave()
+				schedule(timeToday(timeWeekdayReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdayReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekdayReturn, location.timeZone).time && timeNow < timeToday(timeWeekdaySleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempWeekdayReturn()
+				schedule(timeToday(timeWeekdaySleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdaySleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekdaySleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time and midnight, schedule next day
+            	changeTempWeekdaySleep()
+				schedule(timeToday(timeWeekdayWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment for ${(timeToday(timeWeekdayWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(timeWeekdayWake, location.timeZone).time) { // Are we between midnight yesterday and 1st time, schedule today
+            	changeTempWeekdaySleep()
+				schedule(timeToday(timeWeekdayWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdayWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+			break
+
+				case Calendar.THURSDAY:
+        	if (timeNow >= timeToday(timeWeekdayWake, location.timeZone).time && timeNow < timeToday(timeWeekdayLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempWeekdayWake()
+            	schedule(timeToday(timeWeekdayLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdayLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	}
+        	else if (timeNow >= timeToday(timeWeekdayLeave, location.timeZone).time && timeNow < timeToday(timeWeekdayReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempWeekdayLeave()
+				schedule(timeToday(timeWeekdayReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdayReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekdayReturn, location.timeZone).time && timeNow < timeToday(timeWeekdaySleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempWeekdayReturn()
+				schedule(timeToday(timeWeekdaySleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdaySleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekdaySleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time Friday and midnight, we schedule Saturday
+            	changeTempWeekdaySleep()
+				schedule(timeToday(timeWeekendWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment for ${(timeToday(timeWeekendWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(timeWeekendWake, location.timeZone).time) { // Are we between midnight Friday and 1st time on Saturday, we schedule Saturday
+            	changeTempWeekdaySleep()
+				schedule(timeToday(timeWeekendWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+			break
+
+		case Calendar.FRIDAY:
+		case Calendar.SATURDAY:
+            if (timeNow >= timeToday(timeWeekendWake, location.timeZone).time && timeNow < timeToday(timeWeekendLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempWeekendWake()
+            	schedule(timeToday(timeWeekendLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	}
+        	else if (timeNow >= timeToday(timeWeekendLeave, location.timeZone).time && timeNow < timeToday(timeWeekendReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempWeekendLeave()
+				schedule(timeToday(timeWeekendReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekendReturn, location.timeZone).time && timeNow < timeToday(timeWeekendSleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempWeekendReturn()
+				schedule(timeToday(timeWeekendSleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekendSleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time and midnight, schedule the next day
+            	changeTempWeekendSleep()
+				schedule(timeToday(timeWeekendWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment for ${(timeToday(timeWeekendWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= (midnight - 1).time && timeNow < timeToday(timeWeekendWake, location.timeZone).time) { // Are we between midnight yesterday and 1st time, schedule today
+            	changeTempWeekendSleep()
+				schedule(timeToday(timeWeekendWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+			break
+
+		case Calendar.SUNDAY:
+            if (timeNow >= timeToday(timeWeekendWake, location.timeZone).time && timeNow < timeToday(timeWeekendLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempWeekendWake()
+            	schedule(timeToday(timeWeekendLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	}
+        	else if (timeNow >= timeToday(timeWeekendLeave, location.timeZone).time && timeNow < timeToday(timeWeekendReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempWeekendLeave()
+				schedule(timeToday(timeWeekendReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekendReturn, location.timeZone).time && timeNow < timeToday(timeWeekendSleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempWeekendReturn()
+				schedule(timeToday(timeWeekendSleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekendSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= timeToday(timeWeekendSleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time Sunday and midnight, we schedule Monday
+            	changeTempWeekendSleep()
+				schedule(timeToday(timeWeekdayWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment for ${(timeToday(timeWeekdayWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(timeWeekdayWake, location.timeZone).time) { // Are we between midnight Sunday and 1st time on Monday, we schedule Monday
+            	changeTempWeekendSleep()
+				schedule(timeToday(timeWeekdayWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment for ${timeToday(timeWeekdayWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            }
+			break
+	}
+}
+
+// This section is where the thermostat temperature settings are set. 
+def changeTempWeekdayWake() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdayWake)
+        log.info "Set $thermostat Heat $setPointHeatWeekdayWake°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdayWake)
+        log.info "Set $thermostat Heat $setPointHeatWeekdayWake°"
+	}
+}
+
+def changeTempWeekdayLeave() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdayLeave)
+        log.info "Set $thermostat Heat $setPointHeatWeekdayLeave°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdayLeave)
+	}
+}
+
+def changeTempWeekdayReturn() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdayReturn)
+        log.info "Set $thermostat Heat $setPointHeatWeekdayReturn°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdayReturn)
+        log.info "Set $thermostat Heat $setPointHeatWeekdayReturn°"
+	}
+}
+
+def changeTempWeekdaySleep() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdaySleep)
+        log.info "Set $thermostat Heat $setPointHeatWeekdaySleep°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekdaySleep)
+        log.info "Set $thermostat Heat $setPointHeatWeekdaySleep°"
+	}
+}
+
+def changeTempWeekendWake() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendWake)
+        log.info "Set $thermostat Heat $setPointHeatWeekendWake°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendWake)
+        log.info "Set $thermostat Heat $setPointHeatWeekendWake°"
+	}
+}
+
+def changeTempWeekendLeave() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendLeave)
+        log.info "Set $thermostat Heat $setPointHeatWeekendLeave°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendLeave)
+        log.info "Set $thermostat Heat $setPointHeatWeekendLeave°"
+	}
+}
+
+def changeTempWeekendReturn() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendReturn)
+        log.info "Set $thermostat Heat $setPointHeatWeekdayReturn1°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendReturn)
+        log.info "Set $thermostat Heat $setPointHeatWeekdayReturn1°"
+	}
+}
+
+def changeTempWeekendSleep() {
+	def thermostatState = thermostat.currentThermostatMode
+	log.debug "Thermostat mode = $thermostatState"
+	if (thermostatState == "auto") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendSleep)
+		thermostat.setCoolingSetpoint(setPointCoolWeekendSleep)
+        log.info "Set $thermostat Heat $setPointHeatWeekendSleep°"
+	}
+	else if (thermostatState == "heat") {
+		thermostat.setHeatingSetpoint(setPointHeatWeekendSleep)
+        log.info "Set $thermostat Heat $setPointHeatWeekendSleep°"
+	}
+}
