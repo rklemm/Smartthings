@@ -41,32 +41,32 @@ preferences {
 	// }
 
 	section("Monday to Friday Schedule") {
-		input "time1", "time", title: "Wake Time", required: true
-		input "tempSetpoint1", "number", title: "Wake Heat Temp", required: true
-//		input "tempSetpointA", "number", title: "Wake Cool Temp", required: true
-		input "time2", "time", title: "Leave Time", required: true
-		input "tempSetpoint2", "number", title: "Leave Heat Temp", required: true
-//		input "tempSetpointB", "number", title: "Leave Cool Temp", required: true
-		input "time3", "time", title: "Return Time", required: true
-		input "tempSetpoint3", "number", title: "Return Heat Temp", required: true
-//		input "tempSetpointC", "number", title: "Return Cool Temp", required: true
-		input "time4", "time", title: "Sleep Time", required: true
-		input "tempSetpoint4", "number", title: "Sleep Heat Temp", required: true
-//		input "tempSetpointD", "number", title: "Sleep Cool Temp", required: true
+		input "timeMFWake", "time", title: "Wake Time", required: true
+		input "tempHeatMFWake", "number", title: "Wake Heat Temp", required: true
+//		input "tempCoolMFWake", "number", title: "Wake Cool Temp", required: true
+		input "timeMFLeave", "time", title: "Leave Time", required: true
+		input "tempHeatMFLeave", "number", title: "Leave Heat Temp", required: true
+//		input "tempCoolMFLeave", "number", title: "Leave Cool Temp", required: true
+		input "timeMFReturn", "time", title: "Return Time", required: true
+		input "tempHeatMFReturn", "number", title: "Return Heat Temp", required: true
+//		input "tempCoolMFReturn", "number", title: "Return Cool Temp", required: true
+		input "timeMFSleep", "time", title: "Sleep Time", required: true
+		input "tempHeatMFSleep", "number", title: "Sleep Heat Temp", required: true
+//		input "tempCoolMFSleep", "number", title: "Sleep Cool Temp", required: true
 	}
 	section("Saturday and Sunday Schedule") {
-		input "time11", "time", title: "Wake Time", required: true
-		input "tempSetpoint11", "number", title: "Wake Heat Temp", required: true
-//		input "tempSetpointAA", "number", title: "Wake Cool Temp", required: true
-		input "time21", "time", title: "Leave Time", required: true
-		input "tempSetpoint21", "number", title: "Leave Heat Temp", required: true
-//		input "tempSetpointBB", "number", title: "Leave Cool Temp", required: true
-		input "time31", "time", title: "Return Time", required: true
-		input "tempSetpoint31", "number", title: "Return Heat Temp", required: true
-//		input "tempSetpointCC", "number", title: "Return Cool Temp", required: true
-		input "time41", "time", title: "Sleep Time", required: true
-		input "tempSetpoint41", "number", title: "Sleep Heat Temp", required: true
-//		input "tempSetpointDD", "number", title: "Sleep Cool Temp", required: true
+		input "timeSaSuWake", "time", title: "Wake Time", required: true
+		input "tempHeatSaSuWake", "number", title: "Wake Heat Temp", required: true
+//		input "tempCoolSaSuWake", "number", title: "Wake Cool Temp", required: true
+		input "timeSaSuLeave", "time", title: "Leave Time", required: true
+		input "tempHeatSaSuLeave", "number", title: "Leave Heat Temp", required: true
+//		input "tempCoolSaSuLeave", "number", title: "Leave Cool Temp", required: true
+		input "timeSaSuReturn", "time", title: "Return Time", required: true
+		input "tempHeatSaSuReturn", "number", title: "Return Heat Temp", required: true
+//		input "tempCoolSaSuReturn", "number", title: "Return Cool Temp", required: true
+		input "timeSaSuSleep", "time", title: "Sleep Time", required: true
+		input "tempHeatSaSuSleep", "number", title: "Sleep Heat Temp", required: true
+//		input "tempCoolSaSuSleep", "number", title: "Sleep Cool Temp", required: true
 	}
 }
 
@@ -141,14 +141,14 @@ def initialize() {
 	def midnightToday = timeToday("2000-01-01T23:59:59.999-0000", location.timeZone)
    	log.debug("Current time is ${(new Date(timeNow)).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
 	log.debug("Midnight today is ${midnightToday.format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-   	log.trace("Weekday schedule1 ${timeToday(time1, location.timeZone).format("HH:mm z", location.timeZone)}")
-   	log.trace("Weekday schedule2 ${timeToday(time2, location.timeZone).format("HH:mm z", location.timeZone)}")
-   	log.trace("Weekday schedule3 ${timeToday(time3, location.timeZone).format("HH:mm z", location.timeZone)}")
-   	log.trace("Weekday schedule4 ${timeToday(time4, location.timeZone).format("HH:mm z", location.timeZone)}")
-   	log.trace("Weekend schedule1 ${timeToday(time11, location.timeZone).format("HH:mm z", location.timeZone)}")
-   	log.trace("Weekend schedule2 ${timeToday(time21, location.timeZone).format("HH:mm z", location.timeZone)}")
-   	log.trace("Weekend schedule3 ${timeToday(time31, location.timeZone).format("HH:mm z", location.timeZone)}")
-   	log.trace("Weekend schedule4 ${timeToday(time41, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekday schedule1 ${timeToday(timeMFWake, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekday schedule2 ${timeToday(timeMFLeave, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekday schedule3 ${timeToday(timeMFReturn, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekday schedule4 ${timeToday(timeMFSleep, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend schedule1 ${timeToday(timeSaSuWake, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend schedule2 ${timeToday(timeSaSuLeave, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend schedule3 ${timeToday(timeSaSuReturn, location.timeZone).format("HH:mm z", location.timeZone)}")
+   	log.trace("Weekend schedule4 ${timeToday(timeSaSuSleep, location.timeZone).format("HH:mm z", location.timeZone)}")
 
 	// This section is where the time/temperature schedule is set
 	switch (today) {
@@ -156,294 +156,294 @@ def initialize() {
 		case Calendar.TUESDAY:
 		case Calendar.WEDNESDAY:
 		case Calendar.THURSDAY:
-        	if (timeNow >= timeToday(time1, location.timeZone).time && timeNow < timeToday(time2, location.timeZone).time) { // Are we between 1st time and 2nd time
-        		changeTemp1()
-            	schedule(timeToday(time2, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time2, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time2, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	if (timeNow >= timeToday(timeMFWake, location.timeZone).time && timeNow < timeToday(timeMFLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempMFWake()
+            	schedule(timeToday(timeMFLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment () for ${timeToday(timeMFLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFLeave) for ${timeToday(timeMFLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
         	}
-        	else if (timeNow >= timeToday(time2, location.timeZone).time && timeNow < timeToday(time3, location.timeZone).time) { // Are we between 2nd time and 3rd time
-            	changeTemp2()
-				schedule(timeToday(time3, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time3, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time3, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	else if (timeNow >= timeToday(timeMFLeave, location.timeZone).time && timeNow < timeToday(timeMFReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempMFLeave()
+				schedule(timeToday(timeMFReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFReturn) for ${timeToday(timeMFReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFReturn) for ${timeToday(timeMFReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time3, location.timeZone).time && timeNow < timeToday(time4, location.timeZone).time) { // Are we between 3rd time and 4th time
-            	changeTemp3()
-				schedule(timeToday(time4, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time4, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time4, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeMFReturn, location.timeZone).time && timeNow < timeToday(timeMFSleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempMFReturn()
+				schedule(timeToday(timeMFSleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFSleep) for ${timeToday(timeMFSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFSleep) for ${timeToday(timeMFSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time4, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time and midnight, schedule next day
-            	changeTemp4()
-				schedule(timeToday(time1, location.timeZone) + 1, initialize)
-                log.info("$thermostat Scheduled next adjustment for ${(timeToday(time1, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${(timeToday(time1, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeMFSleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time and midnight, schedule next day
+            	changeTempMFSleep()
+				schedule(timeToday(timeMFWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFWake) for ${(timeToday(timeMFWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFWake) for ${(timeToday(timeMFWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(time1, location.timeZone).time) { // Are we between midnight yesterday and 1st time, schedule today
-            	changeTemp4()
-				schedule(timeToday(time1, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time1, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time1, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(timeMFWake, location.timeZone).time) { // Are we between midnight yesterday and 1st time, schedule today
+            	changeTempMFSleep()
+				schedule(timeToday(timeMFWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFWake) for ${timeToday(timeMFWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFWake) for ${timeToday(timeMFWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
 			break
 
 		case Calendar.FRIDAY:
-        	if (timeNow >= timeToday(time1, location.timeZone).time && timeNow < timeToday(time2, location.timeZone).time) { // Are we between 1st time and 2nd time
-        		changeTemp1()
-            	schedule(timeToday(time2, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time2, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time2, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	if (timeNow >= timeToday(timeMFWake, location.timeZone).time && timeNow < timeToday(timeMFLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempMFWake()
+            	schedule(timeToday(timeMFLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFLeave) for ${timeToday(timeMFLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFLeave) for ${timeToday(timeMFLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
         	}
-        	else if (timeNow >= timeToday(time2, location.timeZone).time && timeNow < timeToday(time3, location.timeZone).time) { // Are we between 2nd time and 3rd time
-            	changeTemp2()
-				schedule(timeToday(time3, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time3, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time3, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	else if (timeNow >= timeToday(timeMFLeave, location.timeZone).time && timeNow < timeToday(timeMFReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempMFLeave()
+				schedule(timeToday(timeMFReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFReturn) for ${timeToday(timeMFReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFReturn) for ${timeToday(timeMFReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time3, location.timeZone).time && timeNow < timeToday(time4, location.timeZone).time) { // Are we between 3rd time and 4th time
-            	changeTemp3()
-				schedule(timeToday(time4, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time4, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time4, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeMFReturn, location.timeZone).time && timeNow < timeToday(timeMFSleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempMFReturn()
+				schedule(timeToday(timeMFSleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFSleep) for ${timeToday(timeMFSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFSleep) for ${timeToday(timeMFSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time4, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time Friday and midnight, we schedule Saturday
-            	changeTemp4()
-				schedule(timeToday(time11, location.timeZone) + 1, initialize)
-                log.info("$thermostat Scheduled next adjustment for ${(timeToday(time11, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${(timeToday(time11, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeMFSleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time Friday and midnight, we schedule Saturday
+            	changeTempMFSleep()
+				schedule(timeToday(timeSaSuWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuWake) for ${(timeToday(timeSaSuWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuWake) for ${(timeToday(timeSaSuWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(time11, location.timeZone).time) { // Are we between midnight Friday and 1st time on Saturday, we schedule Saturday
-            	changeTemp4()
-				schedule(timeToday(time11, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time11, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time11, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(timeSaSuWake, location.timeZone).time) { // Are we between midnight Friday and 1st time on Saturday, we schedule Saturday
+            	changeTempMFSleep()
+				schedule(timeToday(timeSaSuWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuWake) for ${timeToday(timeSaSuWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuWake) for ${timeToday(timeSaSuWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
 			break
 
 		case Calendar.SATURDAY:
-            if (timeNow >= timeToday(time11, location.timeZone).time && timeNow < timeToday(time21, location.timeZone).time) { // Are we between 1st time and 2nd time
-        		changeTemp11()
-            	schedule(timeToday(time21, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time21, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time21, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            if (timeNow >= timeToday(timeSaSuWake, location.timeZone).time && timeNow < timeToday(timeSaSuLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempSaSuWake()
+            	schedule(timeToday(timeSaSuLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuLeave) for ${timeToday(timeSaSuLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuLeave) for ${timeToday(timeSaSuLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
         	}
-        	else if (timeNow >= timeToday(time21, location.timeZone).time && timeNow < timeToday(time31, location.timeZone).time) { // Are we between 2nd time and 3rd time
-            	changeTemp21()
-				schedule(timeToday(time31, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time31, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time31, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	else if (timeNow >= timeToday(timeSaSuLeave, location.timeZone).time && timeNow < timeToday(timeSaSuReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempSaSuLeave()
+				schedule(timeToday(timeSaSuReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuReturn) for ${timeToday(timeSaSuReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuReturn) for ${timeToday(timeSaSuReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time31, location.timeZone).time && timeNow < timeToday(time41, location.timeZone).time) { // Are we between 3rd time and 4th time
-            	changeTemp31()
-				schedule(timeToday(time41, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time41, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time41, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeSaSuReturn, location.timeZone).time && timeNow < timeToday(timeSaSuSleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempSaSuReturn()
+				schedule(timeToday(timeSaSuSleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuSleep) for ${timeToday(timeSaSuSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuSleep) for ${timeToday(timeSaSuSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time41, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time and midnight, schedule the next day
-            	changeTemp41()
-				schedule(timeToday(time11, location.timeZone) + 1, initialize)
-                log.info("$thermostat Scheduled next adjustment for ${(timeToday(time11, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${(timeToday(time11, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeSaSuSleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time and midnight, schedule the next day
+            	changeTempSaSuSleep()
+				schedule(timeToday(timeSaSuWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuWake) for ${(timeToday(timeSaSuWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuWake) for ${(timeToday(timeSaSuWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(time11, location.timeZone).time) { // Are we between midnight yesterday and 1st time, schedule today
-            	changeTemp41()
-				schedule(timeToday(time11, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time11, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time11, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(timeSaSuWake, location.timeZone).time) { // Are we between midnight yesterday and 1st time, schedule today
+            	changeTempSaSuSleep()
+				schedule(timeToday(timeSaSuWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuWake) for ${timeToday(timeSaSuWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuWake) for ${timeToday(timeSaSuWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
 			break
 
 		case Calendar.SUNDAY:
-            if (timeNow >= timeToday(time11, location.timeZone).time && timeNow < timeToday(time21, location.timeZone).time) { // Are we between 1st time and 2nd time
-        		changeTemp11()
-            	schedule(timeToday(time21, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time21, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time21, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            if (timeNow >= timeToday(timeSaSuWake, location.timeZone).time && timeNow < timeToday(timeSaSuLeave, location.timeZone).time) { // Are we between 1st time and 2nd time
+        		changeTempSaSuWake()
+            	schedule(timeToday(timeSaSuLeave, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuLeave) for ${timeToday(timeSaSuLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuLeave) for ${timeToday(timeSaSuLeave, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
         	}
-        	else if (timeNow >= timeToday(time21, location.timeZone).time && timeNow < timeToday(time31, location.timeZone).time) { // Are we between 2nd time and 3rd time
-            	changeTemp21()
-				schedule(timeToday(time31, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time31, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time31, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+        	else if (timeNow >= timeToday(timeSaSuLeave, location.timeZone).time && timeNow < timeToday(timeSaSuReturn, location.timeZone).time) { // Are we between 2nd time and 3rd time
+            	changeTempSaSuLeave()
+				schedule(timeToday(timeSaSuReturn, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuReturn) for ${timeToday(timeSaSuReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuReturn) for ${timeToday(timeSaSuReturn, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time31, location.timeZone).time && timeNow < timeToday(time41, location.timeZone).time) { // Are we between 3rd time and 4th time
-            	changeTemp31()
-				schedule(timeToday(time41, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time41, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time41, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeSaSuReturn, location.timeZone).time && timeNow < timeToday(timeSaSuSleep, location.timeZone).time) { // Are we between 3rd time and 4th time
+            	changeTempSaSuReturn()
+				schedule(timeToday(timeSaSuSleep, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeSaSuSleep) for ${timeToday(timeSaSuSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeSaSuSleep) for ${timeToday(timeSaSuSleep, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= timeToday(time41, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time Sunday and midnight, we schedule Monday
-            	changeTemp41()
-				schedule(timeToday(time1, location.timeZone) + 1, initialize)
-                log.info("$thermostat Scheduled next adjustment for ${(timeToday(time1, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${(timeToday(time1, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= timeToday(timeSaSuSleep, location.timeZone).time && timeNow < midnightToday.time) { // Are we between 4th time Sunday and midnight, we schedule Monday
+            	changeTempSaSuSleep()
+				schedule(timeToday(timeMFWake, location.timeZone) + 1, initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFWake) for ${(timeToday(timeMFWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFWake) for ${(timeToday(timeMFWake, location.timeZone) + 1).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
-            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(time1, location.timeZone).time) { // Are we between midnight Sunday and 1st time on Monday, we schedule Monday
-            	changeTemp41()
-				schedule(timeToday(time1, location.timeZone), initialize)
-                log.info("$thermostat Scheduled next adjustment for ${timeToday(time1, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
-                //sendNotificationEvent("$thermostat Scheduled next adjustment for ${timeToday(time1, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+            else if (timeNow >= (midnightToday - 1).time && timeNow < timeToday(timeMFWake, location.timeZone).time) { // Are we between midnight Sunday and 1st time on Monday, we schedule Monday
+            	changeTempSaSuSleep()
+				schedule(timeToday(timeMFWake, location.timeZone), initialize)
+                log.info("$thermostat Scheduled next adjustment (timeMFWake) for ${timeToday(timeMFWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
+                sendNotificationEvent("$thermostat Scheduled next adjustment (timeMFWake) for ${timeToday(timeMFWake, location.timeZone).format("EEE MMM dd yyyy HH:mm z", location.timeZone)}")
             }
 			break
 	}
 }
 
 // This section is where the thermostat temperature settings are set. 
-def changeTemp1() {
+def changeTempMFWake() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint1)
-		// thermostat.setCoolingSetpoint(tempSetpointA)
+		// thermostat.setHeatingSetpoint(tempHeatMFWake)
+		// thermostat.setCoolingSetpoint(tempCoolMFWake)
         // log.info "Set $thermostat Heat $tempSetpoint1°, Cool $tempSetpointA°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint1)
-        log.info "Set $thermostat Heat $tempSetpoint1°"
+		thermostat.setHeatingSetpoint(tempHeatMFWake)
+        log.info "Set $thermostat Heat $tempHeatMFWake°"
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointA)
-        // log.info "Set $thermostat Cool $tempSetpointA°"
+		// thermostat.setCoolingSetpoint(tempCoolMFWake)
+        // log.info "Set $thermostat Cool $tempCoolMFWake°"
 	// }
 }
 
-def changeTemp2() {
+def changeTempMFLeave() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint2)
-		// thermostat.setCoolingSetpoint(tempSetpointB)
-        // log.info "Set $thermostat Heat $tempSetpoint2°, Cool $tempSetpointB°"
+		// thermostat.setHeatingSetpoint(tempHeatMFLeave)
+		// thermostat.setCoolingSetpoint(tempCoolMFLeave)
+        // log.info "Set $thermostat Heat $tempHeatMFLeave°, Cool $tempCoolMFLeave°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint2)
+		thermostat.setHeatingSetpoint(tempHeatMFLeave)
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointB)
+		// thermostat.setCoolingSetpoint(tempCoolMFLeave)
 	// }
 }
 
-def changeTemp3() {
+def changeTempMFReturn() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint3)
-		// thermostat.setCoolingSetpoint(tempSetpointC)
-        // log.info "Set $thermostat Heat $tempSetpoint3°, Cool $tempSetpointC°"
+		// thermostat.setHeatingSetpoint(tempHeatMFReturn)
+		// thermostat.setCoolingSetpoint(tempCoolMFReturn)
+        // log.info "Set $thermostat Heat $tempHeatMFReturn°, Cool $tempCoolMFReturn°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint3)
-        log.info "Set $thermostat Heat $tempSetpoint3°"
+		thermostat.setHeatingSetpoint(tempHeatMFReturn)
+        log.info "Set $thermostat Heat $tempHeatMFReturn°"
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointC)
-        // log.info "Set $thermostat Cool $tempSetpointC°"
+		// thermostat.setCoolingSetpoint(tempCoolMFReturn)
+        // log.info "Set $thermostat Cool $tempCoolMFReturn°"
 	// }
 }
 
-def changeTemp4() {
+def changeTempMFSleep() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint4)
-		// thermostat.setCoolingSetpoint(tempSetpointD)
-        // log.info "Set $thermostat Heat $tempSetpoint4°, Cool $tempSetpointD°"
+		// thermostat.setHeatingSetpoint(tempHeatMFSleep)
+		// thermostat.setCoolingSetpoint(tempCoolMFSleep)
+        // log.info "Set $thermostat Heat $tempHeatMFSleep°, Cool $tempCoolMFSleep°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint4)
-        log.info "Set $thermostat Heat $tempSetpoint4°"
+		thermostat.setHeatingSetpoint(tempHeatMFSleep)
+        log.info "Set $thermostat Heat $tempHeatMFSleep"
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointD)
-        // log.info "Set $thermostat Cool $tempSetpointD°"
+		// thermostat.setCoolingSetpoint(tempCoolMFSleep)
+        // log.info "Set $thermostat Cool $tempCoolMFSleep°"
 	// }
 }
 
-def changeTemp11() {
+def changeTempSaSuWake() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint11)
-		// thermostat.setCoolingSetpoint(tempSetpointAA)
-        // log.info "Set $thermostat Heat $tempSetpoint11°, Cool $tempSetpointAA°"
+		// thermostat.setHeatingSetpoint(tempHeatSaSuWake)
+		// thermostat.setCoolingSetpoint(tempCoolSaSuWake)
+        // log.info "Set $thermostat Heat $tempHeatSaSuWake°, Cool $tempCoolSaSuWake°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint11)
-        log.info "Set $thermostat Heat $tempSetpoint11°"
+		thermostat.setHeatingSetpoint(tempHeatSaSuWake)
+        log.info "Set $thermostat Heat $tempHeatSaSuWake"
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointAA)
-        // log.info "Set $thermostat Cool $tempSetpointAA°"
+		// thermostat.setCoolingSetpoint(tempCoolSaSuWake)
+        // log.info "Set $thermostat Cool $tempCoolSaSuWake°"
 	// }
 }
 
-def changeTemp21() {
+def changeTempSaSuLeave() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint21)
-		// thermostat.setCoolingSetpoint(tempSetpointBB)
-        // log.info "Set $thermostat Heat $tempSetpoint21°, Cool $tempSetpointBB°"
+		// thermostat.setHeatingSetpoint(tempHeatSaSuLeave)
+		// thermostat.setCoolingSetpoint(tempCoolSaSuLeave)
+        // log.info "Set $thermostat Heat $tempHeatSaSuLeave°, Cool $tempCoolSaSuLeave°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint21)
-        log.info "Set $thermostat Heat $tempSetpoint21°"
+		thermostat.setHeatingSetpoint(tempHeatSaSuLeave)
+        log.info "Set $thermostat Heat $tempHeatSaSuLeave"
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointBB)
-        // log.info "Set $thermostat Cool $tempSetpointBB°"
+		// thermostat.setCoolingSetpoint(tempCoolSaSuLeave)
+        // log.info "Set $thermostat Cool $tempCoolSaSuLeave°"
 	// }
 }
 
-def changeTemp31() {
+def changeTempSaSuReturn() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint31)
-		// thermostat.setCoolingSetpoint(tempSetpointCC)
-        // log.info "Set $thermostat Heat $tempSetpoint31°, Cool $tempSetpointCC°"
+		// thermostat.setHeatingSetpoint(tempHeatSaSuReturn)
+		// thermostat.setCoolingSetpoint(tempCoolSaSuReturn)
+        // log.info "Set $thermostat Heat $tempHeatSaSuReturn°, Cool $tempCoolSaSuReturn°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint31)
-        log.info "Set $thermostat Heat $tempSetpoint31°"
+		thermostat.setHeatingSetpoint(tempHeatSaSuReturn)
+        log.info "Set $thermostat Heat $tempHeatSaSuReturn"
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointCC)
-        // log.info "Set $thermostat Cool $tempSetpointCC°"
+		// thermostat.setCoolingSetpoint(tempCoolSaSuReturn)
+        // log.info "Set $thermostat Cool $tempCoolSaSuReturn°"
 	// }
 }
 
-def changeTemp41() {
+def changeTempSaSuSleep() {
 	def thermostatState = thermostat.currentThermostatMode
 	log.debug "Thermostat mode = $thermostatState"
 	def thermostatFan = thermostat.currentThermostatFanMode
 	log.debug "Thermostat fan = $thermostatFan"
 	// if (thermostatState == "auto") {
-		// thermostat.setHeatingSetpoint(tempSetpoint41)
-		// thermostat.setCoolingSetpoint(tempSetpointDD)
-        // log.info "Set $thermostat Heat $tempSetpoint41°, Cool $tempSetpointDD°"
+		// thermostat.setHeatingSetpoint(tempHeatSaSuSleep)
+		// thermostat.setCoolingSetpoint(tempCoolSaSuSleep)
+        // log.info "Set $thermostat Heat $tempHeatSaSuSleep°, Cool $tempCoolSaSuSleep°"
 	// }
 	// else if (thermostatState == "heat") {
-		thermostat.setHeatingSetpoint(tempSetpoint41)
-        log.info "Set $thermostat Heat $tempSetpoint41°"
+		thermostat.setHeatingSetpoint(tempHeatSaSuSleep)
+        log.info "Set $thermostat Heat $tempHeatSaSuSleep°"
 	// }
 	// else {
-		// thermostat.setCoolingSetpoint(tempSetpointDD)
-        // log.info "Set $thermostat Cool $tempSetpointDD°"
+		// thermostat.setCoolingSetpoint(tempCoolSaSuSleep)
+        // log.info "Set $thermostat Cool $tempCoolSaSuSleep°"
 	// }
 }
